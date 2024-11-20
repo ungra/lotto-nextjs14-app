@@ -19,13 +19,13 @@ export default function AppMain() {
   }, []);
 
   const router = useRouter();
-  console.log("user:", user);
   return (
     <div>
       {user ? (
         <>
           <h1>AppMain Page</h1>
           <h2>Lotto Service</h2>
+          <h2>UserName:{`${user.displayName}`}</h2>
         </>
       ) : null}
     </div>
