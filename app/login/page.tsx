@@ -27,7 +27,7 @@ export default function Login() {
     }
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/");
+      router.push("/lotto");
     } catch (error) {
       if (error instanceof FirebaseError) {
         setError(error.message);
@@ -61,7 +61,10 @@ export default function Login() {
       </form>
       {error ? <h3>{error}</h3> : null}
       <GithubLogin />
-      <Link href="/create-account">Creat one &rarr;</Link>
+      <div>
+        <h4>Don't have an account?</h4>
+        <Link href="/create-account">Creat one &rarr;</Link>
+      </div>
     </div>
   );
 }

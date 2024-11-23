@@ -34,7 +34,7 @@ export default function CreateAccout() {
       await updateProfile(userCredential.user, {
         displayName: name,
       });
-      router.push("/");
+      router.push("/login");
     } catch (error) {
       if (error instanceof FirebaseError) {
         setError(error.message);
@@ -73,8 +73,10 @@ export default function CreateAccout() {
         <input type="submit" value="Create Account"></input>
       </form>
       {error ? <h3>{error}</h3> : null}
-      <h4>Already have an account?</h4>
-      <Link href="/login">Log in &rarr;</Link>
+      <div>
+        <h4>Already have an account?</h4>
+        <Link href="/login">Log in &rarr;</Link>
+      </div>
     </div>
   );
 }
