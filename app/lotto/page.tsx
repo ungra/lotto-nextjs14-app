@@ -1,10 +1,9 @@
 "use client";
 
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { auth } from "../../firebase";
 import { useRouter } from "next/navigation";
-import GetLotto from "../../components/GetLotto";
 
 interface Lotto {
   drwtNo6: number;
@@ -17,10 +16,10 @@ interface Lotto {
   drwtNo1: number;
 }
 
-export default function Lotto({ json }: { json: any }) {
+export default function Lotto() {
   const [user, setUser] = useState<User | null>(null);
-  const [lotto, setLotto] = useState<Lotto | null>(null);
   const [number, setNumber] = useState("");
+  const [data, setData] = useState<Lotto | null>(null);
   const router = useRouter();
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
@@ -48,8 +47,13 @@ export default function Lotto({ json }: { json: any }) {
   };
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const lotto = await GetLotto(number);
-    setLotto(lotto);
+    try {
+      const response = await fetch("/api/lotto?drwNo=" + number);
+      const data = await response.json();
+      setData(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div>
@@ -68,7 +72,13 @@ export default function Lotto({ json }: { json: any }) {
         <input type="submit" value="Click"></input>
       </form>
       <hr />
-      <h3>{lotto ? `${lotto}` : null}</h3>
+      {data ? (
+        <div>
+          <p>{`회차정보 : ${data?.drwNo}`}</p>
+          <p>{`당첨번호: ${data?.drwtNo1}, ${data?.drwtNo2}, ${data?.drwtNo3}, ${data?.drwtNo4}, ${data?.drwtNo5}, ${data?.drwtNo6}`}</p>
+          <p>{`보너스: ${data?.bnusNo}`}</p>
+        </div>
+      ) : null}
     </div>
   );
 }
